@@ -58,7 +58,7 @@ export function MoreLink({ href, children, className }: { href: string; children
 }
 
 /* Heading lines that rise out of their own masks. Used by the hero only: the one place a line-by-line entrance is
-   allowed besides the preloader (every other heading is a single "head" reveal). */
+   allowed (every other heading is a single "head" reveal). */
 export function Lines({ lines, className }: { lines: string[]; className?: string }) {
   return (
     <span className={className}>

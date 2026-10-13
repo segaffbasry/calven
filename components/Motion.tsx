@@ -13,16 +13,14 @@ gsap.registerPlugin(ScrollTrigger, CustomEase);
 /* One curve family, taken from medivide.io (the look reference). Its Salient theme moves every button, arrow and
    link wrap on cubic-bezier(.25,1,.33,1) over .45s (".nectar-cta .link_wrap", read from its stylesheet).
      EASE      "calven"        that curve, for everything that settles. CSS twin: --ease in globals.css.
-     EASE_IO   "power3.inOut"  frames and curtains that open: image clips, the menu panel, the preloader exit.
-     EASE_DRAW "power2.inOut"  the preloader's arc, drawn at an even pace like a pen stroke. */
+     EASE_IO   "power3.inOut"  frames that open: image clips and the menu panel. */
 CustomEase.create("calven", "0.25,1,0.33,1");
 export const EASE = "calven";
 export const EASE_IO = "power3.inOut";
-export const EASE_DRAW = "power2.inOut";
 
 export const reducedMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// Handover from the preloader: the hero, header and scroll wait for this.
+// The intro flag: set before first paint (app/layout.tsx); the hero and header start from it.
 export const INTRO_DONE = "intro:done";
 export const introDone = () => document.documentElement.dataset.intro === "done";
 export function onIntro(fn: () => void) {
@@ -34,7 +32,7 @@ export function onIntro(fn: () => void) {
 /* Page-wide behaviour:
    - the link guard: a private demo, so nothing leaves the page. Calven has no live site, so every link is a "#"
      section link anyway; the guard routes those through Lenis and blocks anything else, in case.
-   - Lenis on the GSAP ticker, synced with ScrollTrigger, stopped while the preloader or the menu is open.
+   - Lenis on the GSAP ticker, synced with ScrollTrigger, stopped while the menu is open.
      lerp .12, not a fixed duration (a fixed duration read as a jump at the bottom of the page on an earlier demo).
    - the reveal vocabulary, declared in markup with data-reveal (the table in README.md):
        head    a heading: the whole phrase fades and rises once
@@ -72,7 +70,6 @@ export function Motion() {
     const tick = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
-    if (document.documentElement.classList.contains("is-loading")) lenis.stop();
 
     const ctx = gsap.context(() => {
       const pace = (el: Element) => (el.closest("[data-late]") ? 0.75 : 1);

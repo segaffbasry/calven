@@ -17,7 +17,7 @@ is Next.js, the build command is `next build` and the output is `.next`.
 
 | Route | What it is |
 | --- | --- |
-| `/` | Preloader, hero, range, essentials, feature, care-space guide, enquiry, footer |
+| `/` | Hero, range, essentials, feature, care-space guide, enquiry, footer |
 
 The build is static: `/` plus the framework's own `/_not-found` (and `/icon.svg`).
 
@@ -34,8 +34,6 @@ The build is static: `/` plus the framework's own `/_not-found` (and `/icon.svg`
 
   At all three widths there is no horizontal scroll, there are no broken images and there are no console errors
   (`scripts/shots.mjs`).
-- **Preloader** (`scripts/intro.mjs`): handover at about 1.55s on the timeline, finished by about 2.1s. Scroll
-  stays at 0 when a wheel event fires during the intro. It is skipped with reduced motion.
 - **Keyboard and behaviour** (`scripts/keys.mjs`):
   - the menu opens from the keyboard, focus moves in, Tab stays trapped, Esc closes, and focus returns to the
     menu button
@@ -81,26 +79,16 @@ Teal `#00A19B`, Charcoal `#181A1C`, Warm white `#FAF9F6`, Stone `#E9E7E2`.
 
 ## Typography
 
-- **Federo** (Cyreal, OFL): the wordmark face. Used for the preloader, hero, headings, range names and the menu.
+- **Federo** (Cyreal, OFL): the wordmark face. Used for the hero, headings, range names and the menu.
 - **Plus Jakarta Sans** (variable, OFL): everything else.
 - Both are self-hosted latin subsets in `public/fonts` (from Google Fonts). The full Federo TTF is kept beside
   them.
 
 ## How it works
 
-- **Preloader** (`components/Preloader.tsx`): built from the real lock-up's parts (`lib/logo.ts`). It stays in
-  the centre the whole time, and nothing flies to the corner (client feedback). One GSAP timeline, about 2.1s:
-  1. The C arc is drawn with `stroke-dashoffset` over a faint track of itself. It is the progress element, with
-     a 00 to 100 counter in a pill beneath.
-  2. The dot pops into the opening.
-  3. C A L V E N rise one by one out of a baseline mask, and MEDICAL SUPPLIES is wiped in from the left.
-  4. At 1.55s comes the handover: `is-loading` is removed from `<html>`, `data-intro="done"` is set and
-     `intro:done` is dispatched. The lock-up lifts and fades, and the Warm white ground draws up like a curtain
-     over the hero's own Warm white, so there is no colour jump.
-
-  Lenis stays stopped until the handover. The preloader plays on every load, is skipped with reduced motion,
-  is hidden without JavaScript, and has a 3s failsafe.
-- **Hero** (`components/home/Hero.tsx`): waits for `intro:done`. The headline lines rise out of masks, then the
+- **No preloader.** It was removed at the client's request (13 Oct 2026). The boot script in `app/layout.tsx` sets
+  `data-intro="done"` before first paint, so the hero and header start at once.
+- **Hero** (`components/home/Hero.tsx`): plays on load. The headline lines rise out of masks, then the
   copy follows. The collage photographs rise and settle into their tilt, and the pills pop in. Each photograph
   drifts with the pointer at its own depth.
 - **Smooth scroll and reveals** (`components/Motion.tsx`): Lenis (`lerp .12`) runs on the GSAP ticker and is
@@ -136,8 +124,8 @@ Teal `#00A19B`, Charcoal `#181A1C`, Warm white `#FAF9F6`, Stone `#E9E7E2`.
   - a coloured shadow `0 4px 7px` that lifts to `0 6px 10px` on hover, while the fill darkens
   - a one-time shimmer band sweeping across on hover (`translate(-150%)` to `150%`, .45s ease-out)
   - the outline variant fills with Charcoal on hover
-- **Reduced motion:** no preloader and no smooth scroll. All content is visible, and the ticker becomes a
-  sideways-scrolling row. **No JavaScript:** nothing is hidden, and the preloader is hidden by `<noscript>`.
+- **Reduced motion:** no smooth scroll. All content is visible, and the ticker becomes a
+  sideways-scrolling row. **No JavaScript:** nothing is hidden.
 
 ## Private demo settings
 

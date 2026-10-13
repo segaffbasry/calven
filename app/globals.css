@@ -65,7 +65,6 @@ body {
   font: 400 var(--fs-body) / 1.55 var(--font-body);
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
-html.is-loading body { overflow: hidden; }
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
 p, h1, h2, h3, ul, figure { margin: 0; }
@@ -103,15 +102,6 @@ main:focus, section:focus { outline: none; }
 .logo .logo-word { fill: var(--logo-word, var(--teal)); }
 .logo .logo-sub { fill: var(--logo-sub, var(--charcoal)); }
 .tone-dark { --logo-sub: var(--warm); }
-
-/* ---------- Preloader ---------- */
-.preloader { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; pointer-events: none; }
-html:not(.is-loading) .preloader:not(.is-ready) { display: none; }
-.pl-ground { position: absolute; inset: 0; background: var(--warm); }
-.pl-stage { position: relative; width: min(500px, 76vw); visibility: hidden; }
-.preloader.is-ready .pl-stage { visibility: visible; }
-.pl-logo .pl-track { stroke: var(--mist-strong) !important; }
-.pl-count { position: absolute; left: 50%; top: calc(100% + 32px); transform: translateX(-50%); padding: 6px 14px; border-radius: 36px 36px 36px 0; background: var(--mist); font-size: var(--fs-small); font-weight: 600; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
 
 /* ---------- Copied interaction: doctronic's buttons (components/ui.tsx) ---------- */
 .btn { position: relative; display: inline-flex; border-radius: 52px; -webkit-tap-highlight-color: transparent; }
@@ -344,5 +334,4 @@ html:not(.js) .ticker, .ticker:not(:has(.is-moving)) { overflow-x: auto; }
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
-  .preloader { display: none !important; }
 }

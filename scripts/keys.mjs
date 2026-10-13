@@ -56,7 +56,6 @@ await rm.waitForTimeout(800);
 r.reduced = await rm.evaluate(() => ({
   hiddenReveals: [...document.querySelectorAll("[data-reveal]")].filter((e) => getComputedStyle(e).visibility === "hidden").length,
   lenis: document.documentElement.classList.contains("lenis"),
-  preloader: getComputedStyle(document.querySelector(".preloader")).display,
   heroTitle: getComputedStyle(document.querySelector(".hero-title")).visibility,
 }));
 await rm.screenshot({ path: `${out}/reduced.jpg`, type: "jpeg", quality: 60, fullPage: true });

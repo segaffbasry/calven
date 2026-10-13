@@ -10,7 +10,6 @@
     "media": "bash scripts/fetch-media.sh && bash scripts/optimise-media.sh",
     "links": "node scripts/check-links.mjs",
     "shots": "node scripts/shots.mjs",
-    "intro": "node scripts/intro.mjs shots/intro",
     "keys": "node scripts/keys.mjs shots/keys"
   },
   "dependencies": {

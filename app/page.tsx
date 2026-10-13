@@ -1,6 +1,5 @@
 import { Header } from "@/components/Header";
 import { Motion } from "@/components/Motion";
-import { Preloader } from "@/components/Preloader";
 import { Enquire } from "@/components/home/Enquire";
 import { Essentials } from "@/components/home/Essentials";
 import { Feature } from "@/components/home/Feature";
@@ -17,7 +16,6 @@ export default function Home() {
   return (
     <>
       <Motion />
-      <Preloader />
       <a className="skip-link" href="#main">Skip to content</a>
       <Header />
       <main id="main" tabIndex={-1}>

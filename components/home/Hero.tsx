@@ -11,10 +11,9 @@ import { hero } from "@/lib/content";
    photographs set at slight angles with soft pills floating over them. Here the headline is the campaign's
    "Make room for better care." in Federo; the centre photograph is Ocura's Arvada room, flanked by a nurse with a
    patient and a reception lounge; the pills are the email's three categories.
-   The entrance waits for the preloader's handover, which ends with the logo lifting away from this same centre:
-   the two lines rise out of their masks, the copy follows, then the photographs rise and settle into their angles
+   The entrance plays on load: the two lines rise out of their masks, the copy follows, then the photographs rise and settle into their angles
    and the pills pop in. Each photograph drifts with the pointer at its own depth (the one heavier motion allowed
-   outside the preloader). */
+   on the page). */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
 

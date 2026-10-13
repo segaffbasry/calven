@@ -2,7 +2,7 @@ import { ARC, DOT, LETTERS, MARK_TRANSFORM, SUBLINE, VIEWBOX } from "@/lib/logo"
 
 /* The real lock-up, inline so its parts can be coloured and animated. Colours come from CSS variables
    (--logo-mark, --logo-word, --logo-sub) so one component serves the teal-and-charcoal lock-up on light grounds and
-   the reversed one on Charcoal and Teal. `build` tags each part for the preloader. */
+   the reversed one on Charcoal and Teal. `build` tags each part (data-part) for animation. */
 export function Logo({ id, title = "Calven Medical Supplies", build = false, className }: { id: string; title?: string; build?: boolean; className?: string }) {
   const part = (name: string) => (build ? { "data-part": name } : {});
   return (
