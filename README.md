@@ -21,6 +21,42 @@ is Next.js, the build command is `next build` and the output is `.next`.
 
 The build is static: `/` plus the framework's own `/_not-found` (and `/icon.svg`).
 
+## Verification (13 Oct 2026)
+
+- `npm run typecheck` and `npm run build` pass. The static pages are `/` and `/_not-found`.
+- **Page height:**
+
+  | Width | Height | Viewports |
+  | --- | --- | --- |
+  | 1440 | 5,423 px | 6.0 (at 900px tall) |
+  | 768 | 7,663 px | 7.5 |
+  | 375 | 6,531 px | 8.0 (at 812px tall) |
+
+  At all three widths there is no horizontal scroll, there are no broken images and there are no console errors
+  (`scripts/shots.mjs`).
+- **Preloader** (`scripts/intro.mjs`): handover at about 1.55s on the timeline, finished by about 2.1s. Scroll
+  stays at 0 when a wheel event fires during the intro. It is skipped with reduced motion.
+- **Keyboard and behaviour** (`scripts/keys.mjs`):
+  - the menu opens from the keyboard, focus moves in, Tab stays trapped, Esc closes, and focus returns to the
+    menu button
+  - a menu range link scrolls to and opens its category
+  - "Ask about…" fills the form's category
+  - the form shows its note, and no click leaves the page
+  - with reduced motion, nothing is hidden and Lenis is off
+- **Content per section:**
+
+  | Section | Source | Items | Notes |
+  | --- | --- | --- | --- |
+  | Hero | campaign email | 1 headline, lead, 2 CTAs, 3 category pills, 3 photographs | |
+  | Range | Ocura's six tabs | 6 of 6 | |
+  | Essentials | Ocura's product strip | 6 of 6 | |
+  | Feature | campaign post 02 | 1 | |
+  | Guide | campaign post 03 | 3 of 3 | |
+  | Enquiry | campaign email | 3 categories | |
+
+  Not carried over from Ocura: the case study, the client logos, the 48-hour express claim and the 6Es ethos.
+  These are a real company's claims and clients, and Calven's brand notes rule such claims out.
+
 ## Design direction
 
 - **doctronic.ai (look, added by the client after recon):** soft and calm.

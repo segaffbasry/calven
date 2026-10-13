@@ -271,7 +271,8 @@ html:not(.is-loading) .preloader:not(.is-ready) { display: none; }
 
 /* ---------- Essentials ---------- */
 .essentials-head { display: grid; justify-items: center; text-align: center; gap: 14px; }
-.ticker { margin-top: var(--space-head); overflow: hidden; padding-block: 8px 48px; }
+.ticker { margin-top: var(--space-head); overflow: hidden; padding-block: 8px 40px; }
+.essentials { padding-bottom: calc(var(--space-section) - 40px); } /* the ticker keeps 40px for the hover lift and shadow */
 .ticker-track { display: flex; align-items: flex-start; gap: 20px; width: max-content; padding-left: var(--gutter); will-change: transform; }
 .tile { width: 240px; flex: none; padding: 10px; border-radius: 28px; border: 1px solid var(--line); background: var(--warm); transition: box-shadow 0.4s var(--ease), transform 0.4s var(--ease); }
 .tile:nth-child(even) { margin-top: 32px; } /* medivide's staggered marquee cards */
