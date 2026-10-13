@@ -105,7 +105,7 @@ Teal `#00A19B`, Charcoal `#181A1C`, Warm white `#FAF9F6`, Stone `#E9E7E2`.
   | `image` | photo frames | clip opens from the bottom edge, 1.2s; `data-parallax` drifts the image about 10% |
 
   The easing family is `calven` = `cubic-bezier(.25,1,.33,1)`, medivide's Salient curve. Frames use
-  `power3.inOut`, and the preloader arc uses `power2.inOut`.
+  `power3.inOut`.
 - **Range** (`components/home/Range.tsx`): six categories in a soft card. Hovering, focusing or tapping a row
   opens it and wipes the large frame to its photograph. All six photographs load up front. The frame is CSS
   sticky beside the list, with no scroll pin. Each row's link carries its category into the enquiry form.
