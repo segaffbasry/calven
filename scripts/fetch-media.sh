@@ -21,6 +21,8 @@ get "Armana-Reception-in-situ.jpg"               range-soft.jpg
 # The homepage banner still (Homepage-Banner-Video.png) has a play button baked in, so the feature uses this instead:
 get "MR_191105_Colchester_0016.jpg"            feature-clinic.jpg
 get "_1200x800_crop_center-center_95_none/120066/SDEC9-edit.jpg"         space-sdec.jpg
+# Extra Ocura photograph for the story grid (waiting area, Equala seating)
+get "Equala_lifestyle.jpg"                     story-waiting.jpg
 # Product cut-outs (express range strip)
 for f in Ocura-Medical-Furniture-product-Arvada-02.jpg dominica.jpg CA3581-Stainless-Steel-Pole-4-hook-main.jpg CA2110-Odessa-Atlantic.jpg Over-Bed-Table-CA4860-5450.jpg boston.jpg; do get "$f" "cut-$f"; done
 # Six principles carousel

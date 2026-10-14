@@ -1,17 +1,17 @@
 import { Header } from "@/components/Header";
 import { Motion } from "@/components/Motion";
+import { Divisions } from "@/components/home/Divisions";
 import { Enquire } from "@/components/home/Enquire";
 import { Essentials } from "@/components/home/Essentials";
-import { Feature } from "@/components/home/Feature";
 import { Footer } from "@/components/home/Footer";
-import { Guide } from "@/components/home/Guide";
 import { Hero } from "@/components/home/Hero";
 import { Range } from "@/components/home/Range";
+import { Stories } from "@/components/home/Stories";
 
-/* Calven Medical Supplies' homepage: the look after medivide.io, the range layout after sunflowermedical.co.uk, the
-   copy from Calven's campaign and the products and photography from ocura.co.uk. Grounds: a Warm white page with
-   Stone bands (Essentials, Guide), one Teal section (the enquiry) and the Charcoal footer. No scroll recolouring.
-   Copy: lib/content.ts. Systems: README.md. */
+/* Calven Medical Supplies' homepage, laid out after jnj.com: a two-tier header, a split hero, the two divisions in
+   colour bars over pale panels, a story grid, the range in a grey band, a product carousel, the enquiry and a dark
+   footer. Square corners, a white page and grey bands, no scroll recolouring. Copy: lib/content.ts (campaign copy,
+   Ocura products and imagery). Systems: README.md. */
 export default function Home() {
   return (
     <>
@@ -20,10 +20,10 @@ export default function Home() {
       <Header />
       <main id="main" tabIndex={-1}>
         <Hero />
+        <Divisions />
+        <Stories />
         <Range />
         <Essentials />
-        <Feature />
-        <Guide />
         <Enquire />
       </main>
       <Footer />

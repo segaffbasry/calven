@@ -3,11 +3,11 @@
 import gsap from "gsap";
 import { useEffect, useRef, useState } from "react";
 import { EASE, EASE_IO, reducedMotion } from "@/components/Motion";
-import { Icon, Pill } from "@/components/ui";
+import { Icon } from "@/components/ui";
 import { range } from "@/lib/content";
 
-/* The range, after sunflowermedical.co.uk's split homepage (a photograph held on one side, the categories listed on
-   the other) and medivide.io's indexed category list. Six categories from Ocura's "Healthcare Furniture Solutions"
+/* The range, after jnj.com's "Careers at J&J" band, measured: a warm grey band, a 64px heading, a list of rows
+   divided by hairlines each ending in an arrow, and a square-cornered photograph to the right. Six categories from Ocura's "Healthcare Furniture Solutions"
    block. Pointing at a row (or focusing, or tapping it) makes it the open one: its line of text unfolds and the large
    frame on the right wipes to its photograph. All six photographs load up front (eager, low priority) so a swap
    never shows an empty frame. The frame stays in view beside the list on desktop (CSS sticky, no scroll pin); on
@@ -45,9 +45,8 @@ export function Range() {
     gsap.fromTo(next.querySelector("img"), { scale: 1.12 }, { scale: 1, duration: 1.1, ease: EASE });
   }, [active]);
 
-  const item = range.items[active];
   return (
-    <section className="range section fade" id="range" tabIndex={-1} aria-labelledby="range-title">
+    <section className="range section band" id="range" tabIndex={-1} aria-labelledby="range-title">
       <div className="wrap range-grid">
         <div className="range-copy">
           <h2 id="range-title" className="h2 display" data-reveal="head">{range.title}</h2>
@@ -57,12 +56,12 @@ export function Range() {
               <li key={r.id} className={`range-row${i === active ? " is-active" : ""}`} onPointerEnter={(e) => e.pointerType === "mouse" && setActive(i)}>
                 <button type="button" className="range-head" aria-expanded={i === active} aria-controls={`range-${r.id}`} onClick={() => setActive(i)} onFocus={() => setActive(i)}>
                   <span className="range-name">{r.title}</span>
-                  <Icon name="plus" className="range-icon" />
+                  <Icon name="arrow" className="range-icon" />
                 </button>
                 <div className="range-body" id={`range-${r.id}`} role="region" aria-label={r.title}>
                   <div className="range-body-in">
                     <p>{r.text}</p>
-                    <a className="more" href="#enquire" onClick={() => window.dispatchEvent(new CustomEvent("enquire:topic", { detail: r.title }))}>
+                    <a className="text-link" href="#enquire" onClick={() => window.dispatchEvent(new CustomEvent("enquire:topic", { detail: r.title }))}>
                       <span className="uline-text">Ask about {r.title.toLowerCase()}</span><Icon name="arrow" />
                     </a>
                   </div>
@@ -79,7 +78,6 @@ export function Range() {
                 <img src={r.image.src} width={r.image.w} height={r.image.h} alt={r.image.alt} loading="eager" fetchPriority="low" style={r.image.pos ? { objectPosition: r.image.pos } : undefined} />
               </figure>
             ))}
-            <Pill className="range-caption">{item.title}</Pill>
           </div>
         </div>
       </div>

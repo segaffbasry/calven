@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button, Pill } from "@/components/ui";
+import { Button, Icon } from "@/components/ui";
 import { enquire, range } from "@/lib/content";
 
 /* The enquiry, from the campaign email's closing block: "Find the right fit for your space.", its three categories
-   and the "Discuss your requirements" call to action, in one large soft card. Calven has no inbox, so the form
+   and the "Discuss your requirements" call to action, set as jnj.com sets its closing blocks: a heading at 64px on the left, square fields on the right, on a
+   warm grey band. Calven has no inbox, so the form
    checks its fields and then says plainly that nothing was sent. The range rows fill in "Interested in"
    ("enquire:topic"). */
 export function Enquire() {
@@ -21,13 +22,13 @@ export function Enquire() {
 
   const topics = Array.from(new Set([...enquire.categories, ...range.items.map((r) => r.title)]));
   return (
-    <section className="enquire section" id="enquire" tabIndex={-1} aria-labelledby="enquire-title" data-late>
-      <div className="wrap"><div className="enquire-card">
+    <section className="enquire section band" id="enquire" tabIndex={-1} aria-labelledby="enquire-title" data-late>
+      <div className="wrap enquire-grid">
         <div className="enquire-copy">
           <h2 id="enquire-title" className="h2 display" data-reveal="head">{enquire.title}</h2>
           <p className="lead" data-reveal="text">{enquire.text}</p>
           <ul className="enquire-cats" data-reveal="cards">
-            {enquire.categories.map((c) => <li key={c}><Pill>{c}</Pill></li>)}
+            {enquire.categories.map((c) => <li key={c}><Icon name="check" />{c}</li>)}
           </ul>
         </div>
         <form className="enquire-form" data-reveal="label" noValidate={false}
@@ -49,7 +50,7 @@ export function Enquire() {
             <p className="form-note" ref={note} tabIndex={-1} role="status" aria-live="polite">{sent ? enquire.thanks : ""}</p>
           </div>
         </form>
-      </div></div>
+      </div>
     </section>
   );
 }

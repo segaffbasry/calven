@@ -1,12 +1,14 @@
 // Keyboard and behaviour check: opens the menu from the keyboard, confirms focus moves in, Tab stays trapped, Esc
 // closes and focus returns to the toggle; confirms link clicks never leave the page; opens a range row and carries
-// it into the enquiry form; screenshots the copied button at rest and on hover; submits the form; and loads the page
+// it into the enquiry form; opens and closes a story dialog; measures the copied round button at rest and on hover;
+// submits the form; and loads the page
 // with reduced motion.
 // Usage: node scripts/keys.mjs [outDir] [url]
 import { chromium } from "playwright-core";
 const [out = "shots/keys", url = "http://127.0.0.1:3055/"] = process.argv.slice(2);
 const browser = await chromium.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true });
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+// 1024 wide: the menu button shows below 1100px, where the main navigation folds away.
+const page = await browser.newPage({ viewport: { width: 1024, height: 800 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(String(e)));
 page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
@@ -33,22 +35,32 @@ await page.click(".menu-toggle"); await page.waitForTimeout(900);
 await page.click('#site-menu a[data-item="trolleys"]'); await page.waitForTimeout(2200);
 r.menuRangeLink = await page.evaluate(() => ({ y: Math.round(document.querySelector("#range").getBoundingClientRect().top), open: document.querySelector(".range-row.is-active .range-name")?.textContent }));
 // Range row carries its category into the form
-await page.click(".range-row.is-active .more"); await page.waitForTimeout(2200);
+await page.locator(".range-row.is-active").scrollIntoViewIfNeeded(); await page.waitForTimeout(1500);
+await page.click(".range-row.is-active .text-link"); await page.waitForTimeout(2200);
 r.topic = await page.inputValue('select[name="topic"]');
 // Form
 await page.fill('input[name="name"]', "Test"); await page.fill('input[name="email"]', "test@calven.example");
 await page.click('.enquire-form button[type="submit"]'); await page.waitForTimeout(400);
 r.formNote = await page.textContent(".form-note");
 r.navigated = page.url() !== url || page.context().pages().length > 1;
-// Button rest / hover
-await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(800);
-const btn = page.locator(".hero-actions .btn-primary");
-await btn.screenshot({ path: `${out}/btn-rest.png` });
-await btn.hover(); await page.waitForTimeout(200);
-await btn.screenshot({ path: `${out}/btn-hover-mid.png` });
-await page.waitForTimeout(500);
-await btn.screenshot({ path: `${out}/btn-hover.png` });
-r.btnHover = await btn.evaluate((b) => { const c = getComputedStyle(b.querySelector(".btn-content")); return { bg: c.backgroundColor, shadow: c.boxShadow, shimmer: getComputedStyle(b.querySelector(".btn-shimmer")).animationName }; });
+// Story dialog: opens, holds focus, Esc closes, focus returns
+await page.locator(".story-hit").first().scrollIntoViewIfNeeded(); await page.waitForTimeout(1500);
+await page.locator(".story-hit").first().focus(); await page.keyboard.press("Enter"); await page.waitForTimeout(500);
+r.dialogOpen = await page.evaluate(() => document.querySelector(".story-dialog").open);
+r.dialogFocus = await active();
+await page.screenshot({ path: `${out}/dialog.jpg`, type: "jpeg", quality: 70 });
+await page.keyboard.press("Escape"); await page.waitForTimeout(400);
+r.dialogClosed = await page.evaluate(() => !document.querySelector(".story-dialog").open);
+r.afterDialog = await active();
+// Copied interaction: the round button opens into a pill on hover
+const btn = page.locator(".division .circle-cta").first();
+await btn.scrollIntoViewIfNeeded(); await page.waitForTimeout(1200);
+await btn.screenshot({ path: `${out}/cta-rest.png` });
+const rest = await btn.evaluate((b) => Math.round(b.getBoundingClientRect().width));
+await btn.hover(); await page.waitForTimeout(600);
+await btn.screenshot({ path: `${out}/cta-hover.png` });
+r.ctaWidth = { rest, hover: await btn.evaluate((b) => Math.round(b.getBoundingClientRect().width)) };
+r.ctaColours = await page.evaluate(() => { const c = getComputedStyle(document.querySelector(".btn")); return { bg: c.backgroundColor, color: c.color }; });
 r.errors = errors;
 const rm = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 await rm.goto(url, { waitUntil: "load" });

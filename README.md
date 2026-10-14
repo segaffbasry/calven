@@ -17,80 +17,54 @@ is Next.js, the build command is `next build` and the output is `.next`.
 
 | Route | What it is |
 | --- | --- |
-| `/` | Hero, range, essentials, feature, care-space guide, enquiry, footer |
+| `/` | Header, hero, two divisions, story grid (5 stories with full text), range, essentials carousel, enquiry, footer |
 
 The build is static: `/` plus the framework's own `/_not-found` (and `/icon.svg`).
 
-## Verification (13 Oct 2026)
+## Design direction (jnj.com, client request 14 Oct 2026)
 
-- `npm run typecheck` and `npm run build` pass. The static pages are `/` and `/_not-found`.
-- **Page height:**
+The client asked for the site to look "more like jnj.com, very solid, proper", with more content. Measured from
+jnj.com:
 
-  | Width | Height | Viewports |
-  | --- | --- | --- |
-  | 1440 | 5,423 px | 6.0 (at 900px tall) |
-  | 768 | 7,663 px | 7.5 |
-  | 375 | 6,531 px | 8.0 (at 812px tall) |
+- **Two-tier header:** a 40px dark warm-grey utility bar (#312C2A, here Charcoal) with the divisions on the left
+  and Contact and the region on the right. Under it, an 88px solid white bar with the logo and main navigation.
+  The header stays in place while scrolling.
+- **Split hero:** a large light display headline (80px, line-height 1) beside a square-cornered photograph.
+- **Divisions:** two halves, each a full-colour bar (92px, padding 32px 80px, 24px title) over a pale panel
+  (#F9F8F7) with a paragraph, inline links with arrows and the round arrow button.
+- **Story grid:** a 64px heading, three stories, then two at 2:1. Each has a photograph, a 24px headline and
+  "Read more". Here "Read more" opens the full story in an on-page dialog.
+- **Careers-style band:** a warm-grey band with a list of rows divided by hairlines, each ending in an arrow,
+  beside a photograph. This is used for the range: hovering a row swaps the photograph and unfolds its text.
+- **Carousel:** cards running off the edge, then a hairline with round previous and next buttons. This is used for
+  the six everyday essentials.
+- **Dark footer:** the lock-up, three link groups, a "Get in touch" row and small print. A round back-to-top
+  button sits bottom right.
+- Square corners throughout, black-on-white type (here Charcoal on Warm white) and generous 80 to 116px spacing.
 
-  At all three widths there is no horizontal scroll, there are no broken images and there are no console errors
-  (`scripts/shots.mjs`).
-- **Keyboard and behaviour** (`scripts/keys.mjs`):
-  - the menu opens from the keyboard, focus moves in, Tab stays trapped, Esc closes, and focus returns to the
-    menu button
-  - a menu range link scrolls to and opens its category
-  - "Ask about…" fills the form's category
-  - the form shows its note, and no click leaves the page
-  - with reduced motion, nothing is hidden and Lenis is off
-- **Content per section:**
-
-  | Section | Source | Items | Notes |
-  | --- | --- | --- | --- |
-  | Hero | campaign email | 1 headline, lead, 2 CTAs, 3 category pills, 3 photographs | |
-  | Range | Ocura's six tabs | 6 of 6 | |
-  | Essentials | Ocura's product strip | 6 of 6 | |
-  | Feature | campaign post 02 | 1 | |
-  | Guide | campaign post 03 | 3 of 3 | |
-  | Enquiry | campaign email | 3 categories | |
-
-  Not carried over from Ocura: the case study, the client logos, the 48-hour express claim and the 6Es ethos.
-  These are a real company's claims and clients, and Calven's brand notes rule such claims out.
-
-## Design direction
-
-- **doctronic.ai (look, added by the client after recon):** soft and calm.
-  - a cream page with soft gradient bands that fade from a pale tint into the page
-  - a centred serif hero at a modest size, with a collage of rounded, slightly tilted photographs and floating
-    speech-bubble pills
-  - 32px cards with hairline borders and 20px photo wells inside, and dashed separators
-  - pill buttons
-- **medivide.io:** the single-colour type discipline, the staggered product marquee, and the indexed category list.
-- **sunflowermedical.co.uk:** the split range layout (a photograph held beside the category list) and the tile
-  lift on hover.
+Earlier directions (doctronic.ai, medivide.io, sunflowermedical.co.uk) are superseded. The preloader was removed
+at the client's request.
 
 ## Palette (confirmed)
 
 Teal `#00A19B`, Charcoal `#181A1C`, Warm white `#FAF9F6`, Stone `#E9E7E2`.
 
-- `--mist` and `--mist-strong` are Teal at 10% and 22% over Warm white. They are tints, used for the gradient
-  bands and pills.
-- `--teal-deep` (Teal mixed with Charcoal) is only the primary button's hover shade.
-- Teal type is only used at 24px and above (3.0:1 on Warm white). Body copy is Charcoal (17.4:1). Primary buttons
-  are Teal with Charcoal text (5.5:1).
+- `--sand` (Stone at 45% over Warm white) is jnj's pale panel.
+- `--teal-deep` (Teal mixed with Charcoal) is only the hover shade.
+- **Contrast:** buttons are Teal with Warm white text at the client's request. That pairing is 3.0:1, below the
+  4.5:1 AA level for normal-size text, so labels are 17px at 600 weight to help. Charcoal on Teal (5.5:1) is the
+  accessible alternative if needed.
+- Small links are Charcoal with a Teal arrow.
 
 ## Typography
 
-- **Federo** (Cyreal, OFL): the wordmark face. Used for the hero, headings, range names and the menu.
-- **Plus Jakarta Sans** (variable, OFL): everything else.
-- Both are self-hosted latin subsets in `public/fonts` (from Google Fonts). The full Federo TTF is kept beside
-  them.
+- **Federo** (Cyreal, OFL): the wordmark face. It stands in for jnj's Johnson Display in the hero, headings,
+  story and product titles, and division bars.
+- **Plus Jakarta Sans** (variable, OFL): body text, at jnj's 18px.
+- Both are self-hosted latin subsets in `public/fonts`.
 
 ## How it works
 
-- **No preloader.** It was removed at the client's request (13 Oct 2026). The boot script in `app/layout.tsx` sets
-  `data-intro="done"` before first paint, so the hero and header start at once.
-- **Hero** (`components/home/Hero.tsx`): plays on load. The headline lines rise out of masks, then the
-  copy follows. The collage photographs rise and settle into their tilt, and the pills pop in. Each photograph
-  drifts with the pointer at its own depth.
 - **Smooth scroll and reveals** (`components/Motion.tsx`): Lenis (`lerp .12`) runs on the GSAP ticker and is
   synced with ScrollTrigger. A capture-phase link guard keeps every click on the page and routes `#` links
   through Lenis. Reveal moves are declared with `data-reveal`; anything in `[data-late]` plays at 0.75 of the
@@ -99,49 +73,82 @@ Teal `#00A19B`, Charcoal `#181A1C`, Warm white `#FAF9F6`, Stone `#E9E7E2`.
   | Move | Used for | Animation |
   | --- | --- | --- |
   | `head` | headings | the whole phrase fades and rises 24px, 1.1s |
-  | `text` | paragraphs | words rise out of a line mask, 1s, 8ms stagger |
-  | `label` | small lines, buttons, the form | fade and rise 12px, 0.8s |
-  | `cards` | lists | children rise 32px in batches, 1s, 80ms stagger |
-  | `image` | photo frames | clip opens from the bottom edge, 1.2s; `data-parallax` drifts the image about 10% |
+  | `text` | paragraphs | words rise out of a line mask, 1s |
+  | `label` | division panels, the form | fade and rise 12px, 0.8s |
+  | `cards` | story rows, range list, carousel | children rise 32px in batches, 1s, 80ms stagger |
+  | `image` | photo frames | clip opens from the bottom edge, 1.2s |
 
-  The easing family is `calven` = `cubic-bezier(.25,1,.33,1)`, medivide's Salient curve. Frames use
-  `power3.inOut`.
-- **Range** (`components/home/Range.tsx`): six categories in a soft card. Hovering, focusing or tapping a row
-  opens it and wipes the large frame to its photograph. All six photographs load up front. The frame is CSS
-  sticky beside the list, with no scroll pin. Each row's link carries its category into the enquiry form.
-- **Essentials** (`components/home/Essentials.tsx`): a ticker of the six product cut-outs on soft cards at
-  staggered heights. It drifts at 28px/s, speeds up with scroll velocity, and rests under the pointer or focus.
-- **Enquiry** (`components/home/Enquire.tsx`): the campaign email's closing block. The form validates, then says
-  plainly that nothing was sent. There is no inbox behind this preview.
-- **Header** (`components/Header.tsx`): after doctronic. The logo is on the left. On the right are an outline
-  pill, a solid pill, a hairline and a round menu button. There is no bar. The header hides on scroll down and
-  returns on scroll up. The menu is full-screen: the panel wipes down, then items rise, and it reverses out. It
-  traps focus, closes on Esc and returns focus to the button. Every item scrolls to a homepage section.
-- **Buttons** (`.btn` in `components/ui.tsx` and `app/globals.css`): the copied interaction, doctronic's button,
-  rebuilt with its own structure and values:
-  - a pill with radius 52 and padding 12px 24px
-  - .15s ease-in at rest and ease-out on hover; on press it scales to .98
-  - a coloured shadow `0 4px 7px` that lifts to `0 6px 10px` on hover, while the fill darkens
-  - a one-time shimmer band sweeping across on hover (`translate(-150%)` to `150%`, .45s ease-out)
-  - the outline variant fills with Charcoal on hover
-- **Reduced motion:** no smooth scroll. All content is visible, and the ticker becomes a
-  sideways-scrolling row. **No JavaScript:** nothing is hidden.
+  The easing family is `calven` = `cubic-bezier(.25,1,.33,1)` for settling, and `power3.inOut` for frames.
+  Buttons use jnj's own `.3s`.
+- **Hero** (`components/home/Hero.tsx`): plays on load. The lines rise out of masks, the photograph opens upward,
+  and the copy follows.
+- **Divisions** (`components/home/Divisions.tsx`): range links carry `data-item`, so the range opens on that
+  category.
+- **Stories** (`components/home/Stories.tsx`): a native `<dialog>`. The browser holds focus inside, Esc closes
+  it, focus returns to the card, and smooth scroll pauses while it is open.
+- **Range** (`components/home/Range.tsx`): hovering, focusing or tapping a row opens it and wipes the photograph.
+  All six photographs load up front. "Ask about…" fills the enquiry form's category.
+- **Essentials** (`components/home/Essentials.tsx`): a native horizontal scroller with snap points. The arrows
+  move it one card at a time and grey out at either end.
+- **Enquiry** (`components/home/Enquire.tsx`): validates, then says plainly that nothing was sent. There is no
+  inbox behind this preview.
+- **Header and menu** (`components/Header.tsx`): below 1100px the navigation folds into a full-screen menu. The
+  panel wipes down, the items rise, and it reverses out. It traps focus, closes on Esc and returns focus to the
+  toggle.
+- **The copied interaction:** jnj's round "Learn more" button (`CircleCta` in `components/ui.tsx`).
+  - At rest it is a 64px Teal circle with an arrow.
+  - On hover or focus, padding goes from 0 to 0 32px and the underlined label slides out (theirs:
+    `transition: background .3s, padding .3s`).
+  - The label is always in the accessibility tree.
+- **Reduced motion:** no smooth scroll, and all content is visible. **No JavaScript:** nothing is hidden.
+
+## Verification (14 Oct 2026)
+
+- `npm run typecheck` and `npm run build` pass. The static pages are `/` and `/_not-found`.
+- **Page height:**
+
+  | Width | Height | Viewports |
+  | --- | --- | --- |
+  | 1440 | 5,829 px | 6.5 |
+  | 768 | 9,227 px | 9.0 |
+  | 375 | 8,557 px | 10.5 |
+
+  The client asked for more content, so phones run past the brief's 6 to 8 viewport target.
+- At all three widths there is no horizontal scroll, there are no broken images and there are no console errors
+  (`scripts/shots.mjs`).
+- **Keyboard and behaviour** (`scripts/keys.mjs`, at 1024px):
+  - the menu opens from the keyboard, Tab stays trapped, Esc closes, and focus returns to the toggle
+  - a menu range link opens that category, and "Ask about…" fills the form
+  - a story dialog opens with focus inside, then closes on Esc with focus back on the card
+  - the round button measures 64px at rest and 230px on hover
+  - the form shows its note, and no click leaves the page
+  - with reduced motion, nothing is hidden
+- **Content per section:**
+
+  | Section | Source | Items |
+  | --- | --- | --- |
+  | Hero | campaign email | headline, lead, CTA, photograph |
+  | Divisions | written, campaign post 02 | 2 divisions, 8 links |
+  | Stories | campaign posts 01 to 03 and written guides | 5, each with full text |
+  | Range | Ocura's six tabs | 6 of 6 |
+  | Essentials | Ocura's product strip | 6 of 6 |
+  | Enquiry | campaign email | 3 categories and a form |
+
+  Not carried over from Ocura: the case study, the client logos, the 48-hour claim and the 6Es ethos. These are a
+  real company's claims and clients, and Calven's brand notes rule such claims out.
 
 ## Private demo settings
 
 - `robots` is `noindex, nofollow` in `app/layout.tsx`. There is no sitemap.
-- PostHog EU and the 25/50/75/100 `scroll_depth` events live in `lib/posthog.ts`, injected in `<head>`. The key
-  can be overridden with `NEXT_PUBLIC_POSTHOG_KEY`. Surveys are off and no visible UI is added.
+- PostHog EU and the 25/50/75/100 `scroll_depth` events live in `lib/posthog.ts`. The key can be overridden with
+  `NEXT_PUBLIC_POSTHOG_KEY`. No visible UI is added.
 
 ## Images
 
 - Everything in `public/media` comes from ocura.co.uk. `scripts/fetch-media.sh` downloads the originals, and
-  `scripts/optimise-media.sh` resizes them to WebP (732 KB in all).
-- Ocura's homepage banner still has a play button baked in, so the feature uses Ocura's Colchester clinic
-  photograph instead.
-- Calven's own AI-generated campaign photographs live in the Claude Design project and could not be exported
-  from it.
-- Photographs are shown in natural colour.
+  `scripts/optimise-media.sh` resizes them to WebP.
+- Ocura's homepage banner still has a play button baked in, so it is not used.
+- Calven's own AI-generated campaign photographs live in the Claude Design project and could not be exported.
 
 ## Recon note (Phase 1, 13 Oct 2026)
 

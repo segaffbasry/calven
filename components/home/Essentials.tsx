@@ -1,66 +1,60 @@
 "use client";
 
-import gsap from "gsap";
-import { useEffect, useRef } from "react";
-import { reducedMotion } from "@/components/Motion";
+import { useEffect, useRef, useState } from "react";
+import { Icon } from "@/components/ui";
 import { essentials } from "@/lib/content";
-import { getLenis } from "@/lib/scroll";
 
-/* Everyday essentials: medivide.io's slow marquee of product shots on white cards set at staggered heights
-   (nectar_scrolling_text, scroll_speed "slowest"), dressed as doctronic.ai's soft cards (hairline border, round corners, a
-   quiet image well; sunflowermedical.co.uk's lift and shadow on hover).
-   The six products are the cut-outs from Ocura's homepage strip. The strip drifts left at 28px a second, speeds up
-   with the scroll (Lenis velocity, either direction pushes it on) and rests while the pointer is over it, so a card
-   can be looked at. With reduced motion it is a plain row that scrolls sideways. */
+/* Everyday essentials, after jnj.com's "Learn more about how we are innovating" carousel, measured: a heading, a
+   row of cards (a square-cornered image, a headline, a link) running off the right edge, then a hairline with the
+   previous and next round arrow buttons at its end, the inactive one greyed. Here the cards are the six product
+   cut-outs from Ocura's homepage strip on Stone image wells. The row is a native horizontal scroller with snap
+   points, so touch, trackpad and keyboard all work; the arrows move it one card at a time. */
 export function Essentials() {
   const track = useRef<HTMLUListElement>(null);
+  const [edge, setEdge] = useState({ start: true, end: false });
 
   useEffect(() => {
-    const el = track.current; if (!el || reducedMotion()) return;
-    el.classList.add("is-moving");
-    let x = 0, hover = false, boost = 0;
-    const half = () => el.scrollWidth / 2;
-    const tick = (_t: number, dt: number) => {
-      const v = Math.abs(getLenis()?.velocity ?? 0);
-      boost += (Math.min(v, 60) * 6 - boost) * 0.08; // eased, so a flick swells and settles
-      const speed = hover ? 0 : 28 + boost;
-      x -= (speed * dt) / 1000;
-      const w = half();
-      if (w > 0 && -x >= w) x += w;
-      el.style.transform = `translate3d(${x}px,0,0)`;
-    };
-    gsap.ticker.add(tick);
-    const enter = () => { hover = true; }, leave = () => { hover = false; };
-    el.addEventListener("pointerenter", enter); el.addEventListener("pointerleave", leave);
-    el.addEventListener("focusin", enter); el.addEventListener("focusout", leave);
-    return () => {
-      gsap.ticker.remove(tick);
-      el.removeEventListener("pointerenter", enter); el.removeEventListener("pointerleave", leave);
-      el.removeEventListener("focusin", enter); el.removeEventListener("focusout", leave);
-    };
+    const el = track.current; if (!el) return;
+    const update = () => setEdge({ start: el.scrollLeft < 8, end: el.scrollLeft + el.clientWidth > el.scrollWidth - 8 });
+    update();
+    el.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => { el.removeEventListener("scroll", update); window.removeEventListener("resize", update); };
   }, []);
 
-  // Two copies make the loop seamless; the second is hidden from assistive technology.
-  const cards = (copy: number) => essentials.items.map((p, i) => (
-    <li key={`${copy}-${i}`} className="tile" aria-hidden={copy ? true : undefined}>
-      <div className="tile-img">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={p.src} width={p.w} height={p.h} alt={copy ? "" : p.label} loading="lazy" />
-      </div>
-      <p className="tile-label">{p.label}</p>
-    </li>
-  ));
+  const step = (dir: 1 | -1) => {
+    const el = track.current; if (!el) return;
+    const card = el.querySelector<HTMLElement>("li");
+    el.scrollBy({ left: dir * ((card?.offsetWidth ?? 300) + 24), behavior: "smooth" });
+  };
 
   return (
     <section className="essentials section" id="essentials" tabIndex={-1} aria-labelledby="essentials-title">
-      <div className="wrap essentials-head">
-        <h2 id="essentials-title" className="h2 display" data-reveal="head">{essentials.title}</h2>
-        <p className="lead" data-reveal="text">{essentials.lead}</p>
+      <div className="wrap">
+        <div className="essentials-head">
+          <h2 id="essentials-title" className="h2 display" data-reveal="head">{essentials.title}</h2>
+          <p className="lead" data-reveal="text">{essentials.lead}</p>
+        </div>
       </div>
-      <div className="ticker" data-reveal="label">
-        <ul className="ticker-track" ref={track} aria-label="Everyday essentials">
-          {cards(0)}{cards(1)}
-        </ul>
+      <ul className="carousel" ref={track} aria-label="Everyday essentials" data-lenis-prevent-horizontal data-reveal="cards">
+        {essentials.items.map((p) => (
+          <li key={p.label} className="product">
+            <div className="product-img">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={p.src} width={p.w} height={p.h} alt={p.label} loading="lazy" />
+            </div>
+            <h3 className="product-title">{p.label}</h3>
+            <p className="product-text">{p.text}</p>
+            <a className="text-link" href="#enquire">
+              <span className="uline-text">Enquire</span><Icon name="arrow" />
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div className="wrap carousel-foot">
+        <span className="carousel-rule" aria-hidden="true" />
+        <button type="button" className="round-btn" onClick={() => step(-1)} disabled={edge.start} aria-label="Previous products"><Icon name="left" /></button>
+        <button type="button" className="round-btn" onClick={() => step(1)} disabled={edge.end} aria-label="Next products"><Icon name="arrow" /></button>
       </div>
     </section>
   );

@@ -17,6 +17,7 @@ out range-soft.jpg            range-soft        1400 76
 out range-trolleys.jpg        range-trolleys    1400 76
 out range-cabinets.jpg        range-cabinets    1400 76
 out feature-clinic.jpg        feature           1800 78
+out story-waiting.jpg         story-waiting     1600 78
 out principle-equality.jpg    guide-comfort      537 82
 out space-sdec.jpg            guide-workflow    1000 78
 out principle-easy.jpg        guide-upkeep      1000 78

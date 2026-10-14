@@ -1,8 +1,8 @@
 /* Every word on the page. Calven Medical Supplies is a fictional brand, so it has no live site: the copy comes from
    its campaign copy sheet (copy-sheet.md in the Claude Design project, quoted verbatim and marked "sheet"), and the
-   range and product imagery from ocura.co.uk (per the brief). Ocura's own claims are deliberately not carried over:
-   the brand notes rule out clinical, regulatory, endorsement, statistical, availability and delivery claims.
-   Range and product lines marked "written" are plain descriptions of what each category is, with no claims.
+   range and product imagery from ocura.co.uk. Lines marked "written" are plain, practical descriptions and planning
+   guidance with no claims: the brand notes rule out clinical, regulatory, endorsement, statistical, availability and
+   delivery claims, so nothing here promises a lead time, a warranty, a certification or a customer.
    UK English, and no em or en dashes anywhere (the standing demo rule). */
 
 export const site = {
@@ -12,38 +12,43 @@ export const site = {
   description: "Explore treatment seating and clinical essentials from Calven Medical Supplies.",
 };
 
-/* Header pill and menu. There is no live site to link to, so every item scrolls to a homepage section. */
-export const sections = [
-  { label: "Range", href: "#range" },
-  { label: "Essentials", href: "#essentials" },
-  { label: "Care spaces", href: "#guide" },
+export type Link = { label: string; href: string; item?: string };
+
+/* The utility bar and main navigation, after jnj.com's two-tier header. There is no live site to link to, so every
+   item scrolls to a homepage section. */
+export const utility = {
+  left: [
+    { label: "Discover Calven", href: "#top" },
+    { label: "Treatment seating", href: "#seating" },
+    { label: "Clinical equipment", href: "#equipment" },
+  ] as Link[],
+  right: [
+    { label: "Care spaces", href: "#stories" },
+    { label: "Contact", href: "#enquire" },
+  ] as Link[],
+  region: "UK",
+};
+
+export const sections: Link[] = [
+  { label: "Our range", href: "#range" },
+  { label: "Everyday essentials", href: "#essentials" },
+  { label: "Care spaces", href: "#stories" },
   { label: "Enquire", href: "#enquire" },
 ];
 
 export const hero = {
-  // sheet: email headline, split where the copy breathes
+  // sheet: email headline
   lines: ["Make room", "for better care."],
   // sheet: email body, first sentence
   lead: "From treatment seating to clinical trolleys, the right equipment helps shape a space that works for patients and the people caring for them.",
-  // sheet: primary and secondary CTA
-  primary: { label: "Discuss your requirements", href: "#enquire" },
-  secondary: { label: "Explore the range", href: "#range" },
+  cta: { label: "Discuss your requirements", href: "#enquire" },
   image: { src: "/media/hero.webp", w: 2400, h: 1013, alt: "A calm single patient room with a high-back bedside chair in green beside the bed" },
-  // The collage around the room photograph (after doctronic.ai's hero: tilted photographs with floating pills).
-  side: [
-    { src: "/media/guide-comfort.webp", w: 537, h: 537, alt: "A nurse sits beside an older patient in a teal armchair" },
-    { src: "/media/range-soft.webp", w: 1400, h: 787, alt: "Green armchairs and a sofa in a light reception lounge" },
-  ],
-  // sheet: email categories, shown as the floating pills
-  chips: ["Treatment seating", "Examination couches", "Clinical trolleys"],
-  // sheet: social post 01 subheading, the small line under the buttons
-  note: "Thoughtful equipment for everyday care",
 };
 
 export type RangeItem = { id: string; title: string; text: string; image: { src: string; w: number; h: number; alt: string; pos?: string } };
 
 export const range = {
-  title: "Explore the range",
+  title: "Our range",
   // sheet: email body, second sentence
   lead: "Calven Medical Supplies brings together practical furniture and equipment for busy healthcare settings.",
   // Six categories, following the six tabs of Ocura's "Healthcare Furniture Solutions" block (written).
@@ -63,43 +68,106 @@ export const range = {
   ] as RangeItem[],
 };
 
+/* The two divisions, after jnj.com's "Medicines & therapies" and "Medical devices & technology" bars (written). */
+export const divisions = [
+  {
+    id: "seating", title: "Treatment seating",
+    // sheet: social post 02 footer caption, then written
+    text: "Treatment seating for clinics, wards and care spaces, selected around the people who use it. From the day unit to the ward bay and the waiting room, every chair is chosen with the patient who sits in it and the team who moves, cleans and cares around it.",
+    links: [
+      { label: "Treatment recliners", href: "#range", item: "recliners" },
+      { label: "Bedside chairs", href: "#range", item: "bedside" },
+      { label: "Beam seating", href: "#range", item: "beam" },
+      { label: "Soft seating", href: "#range", item: "soft" },
+    ] as Link[],
+    cta: { label: "Explore seating", href: "#range" },
+  },
+  {
+    id: "equipment", title: "Clinical equipment",
+    text: "Storage and equipment that keeps the essentials close at hand: trolleys for records and medicines, mobile cabinets that move with the room, and the over-bed tables and drip stands that every bay relies on. Practical pieces for the rooms where care happens.",
+    links: [
+      { label: "Clinical trolleys", href: "#range", item: "trolleys" },
+      { label: "Wheeled cabinets", href: "#range", item: "cabinets" },
+      { label: "Over-bed tables", href: "#essentials" },
+      { label: "Drip stands", href: "#essentials" },
+    ] as Link[],
+    cta: { label: "Explore equipment", href: "#essentials" },
+  },
+];
+
+/* Care spaces: planning guides, after jnj.com's "Innovating in healthcare" story grid. Each opens in full on the page
+   (a dialog), since there is no site to link to. The first and second are the campaign's own posts. */
+export type Story = { id: string; tag: string; title: string; image: { src: string; w: number; h: number; alt: string }; body: string[] };
+export const stories = {
+  title: "Inside better care spaces",
+  items: [
+    {
+      id: "three-ways", tag: "Planning guide", title: "3 ways to build a better care space",
+      image: { src: "/media/guide-comfort.webp", w: 537, h: 537, alt: "A nurse sits beside an older patient in a teal armchair" },
+      body: [
+        // sheet: social post 03 caption, verbatim
+        "Planning a care space? Three practical things to consider.",
+        "Patient comfort: who will use the space, and for how long.",
+        "Everyday workflow: how your team moves, works and reaches what it needs.",
+        "Cleaning and upkeep: what day-to-day care of the equipment will involve.",
+        "Calven Medical Supplies can help you explore suitable options.",
+      ],
+    },
+    {
+      id: "patients-and-teams", tag: "Treatment seating", title: "Supporting patients and the teams who care for them",
+      image: { src: "/media/feature.webp", w: 1800, h: 1197, alt: "Light blue riser recliners, one raised to stand, in a bright clinic treatment room" },
+      body: [
+        // sheet: social post 02 caption
+        "Supporting patients and the teams who care for them. Explore treatment seating for clinics, wards and care spaces, selected around the people who use it.",
+        // written
+        "A good treatment chair works for two people at once. For the patient it should be easy to get into and out of, comfortable for the length of a session and simple to adjust. For the team it should move freely, sit at a working height and wipe down quickly between patients.",
+        "Talk to Calven Medical Supplies about your requirements.",
+      ],
+    },
+    {
+      id: "waiting-areas", tag: "Waiting areas", title: "Planning a waiting area that stays calm",
+      image: { src: "/media/story-waiting.webp", w: 1600, h: 1199, alt: "A bright waiting area with rows of sage green linked seating" },
+      body: [
+        // written
+        "Waiting areas see more people, for longer, than almost any other part of a building. Linked beam seating keeps rows tidy and walkways clear, while a mix of seats with and without arms gives people the support they need to sit and stand.",
+        "Think about sightlines to reception, space for wheelchairs and buggies beside the rows, and a few higher or wider seats for those who need them. Calm colours and good light do the rest.",
+      ],
+    },
+    {
+      id: "everyday-details", tag: "Everyday care", title: "Thoughtful care spaces start with the everyday details",
+      image: { src: "/media/guide-workflow.webp", w: 1000, h: 666, alt: "A same-day care unit with rows of green seating and clear walkways" },
+      body: [
+        // sheet: social post 01 caption
+        "Thoughtful care spaces start with the everyday details. Discover treatment seating and clinical essentials for patients and the teams who care for them.",
+        // written
+        "The pieces that matter most are often the smallest: an over-bed table at the right height, a drip stand that rolls where it is needed, a bedside cabinet within reach. Getting these right makes every shift a little easier.",
+      ],
+    },
+    {
+      id: "cleaning-upkeep", tag: "Planning guide", title: "Cleaning and upkeep: what to ask before you choose",
+      image: { src: "/media/guide-upkeep.webp", w: 1000, h: 666, alt: "Wipe-clean seating and a side table in a diagnostic centre" },
+      body: [
+        // written
+        "Equipment is cleaned many times a day, so it pays to ask early how each piece will be looked after. Which surfaces are wipe-clean? Are there seams, gaps or hard-to-reach corners? Can cushions or covers be removed and replaced?",
+        "Answering these questions before you choose helps keep a space ready for the next patient, with less time spent on upkeep.",
+      ],
+    },
+  ] as Story[],
+};
+
 export const essentials = {
-  // sheet: social post 01 headline, subheading and caption
-  title: "Care starts here",
-  lead: "Thoughtful care spaces start with the everyday details.",
-  // The six product cut-outs from Ocura's homepage product strip, named by what they are (no model names).
+  // sheet: social post 01 headline and subheading
+  title: "Everyday essentials",
+  lead: "Thoughtful equipment for everyday care.",
+  // The six product cut-outs from Ocura's homepage product strip, named by what they are (no model names); text written.
   items: [
-    { label: "Patient chair", src: "/media/cut-arvada.webp", w: 800, h: 600 },
-    { label: "Visitor armchair", src: "/media/cut-odessa-atlantic.webp", w: 800, h: 800 },
-    { label: "Over-bed table", src: "/media/cut-over-bed-table.webp", w: 800, h: 800 },
-    { label: "Riser recliner", src: "/media/cut-boston.webp", w: 800, h: 533 },
-    { label: "Bedside cabinet", src: "/media/cut-dominica.webp", w: 800, h: 533 },
-    { label: "Drip stand", src: "/media/cut-stainless-steel-pole.webp", w: 800, h: 800 },
+    { label: "Patient chair", text: "A high-back chair with arms for bedside and treatment rooms.", src: "/media/cut-arvada.webp", w: 800, h: 600 },
+    { label: "Visitor armchair", text: "A light, stackable chair for visitors and consulting rooms.", src: "/media/cut-odessa-atlantic.webp", w: 800, h: 800 },
+    { label: "Over-bed table", text: "A height-adjustable table that rolls over the bed or chair.", src: "/media/cut-over-bed-table.webp", w: 800, h: 800 },
+    { label: "Riser recliner", text: "A recliner that rises to help patients stand.", src: "/media/cut-boston.webp", w: 800, h: 533 },
+    { label: "Bedside cabinet", text: "Storage within reach of the bed, on castors.", src: "/media/cut-dominica.webp", w: 800, h: 533 },
+    { label: "Drip stand", text: "A stainless steel stand with four hooks, on a wheeled base.", src: "/media/cut-stainless-steel-pole.webp", w: 800, h: 800 },
   ],
-};
-
-export const feature = {
-  // sheet: social post 02 headline (its line breaks) and footer caption
-  lines: ["Supporting patients", "and the teams", "who care for them."],
-  text: "Treatment seating for clinics, wards and care spaces, selected around the people who use it.",
-  // sheet: social post 02 caption, last sentence
-  cta: { label: "Talk to Calven Medical Supplies about your requirements", href: "#enquire" },
-  image: { src: "/media/feature.webp", w: 1800, h: 1197, alt: "Light blue riser recliners, one raised to stand, in a bright clinic treatment room" },
-};
-
-export const guide = {
-  // sheet: social post 03 headline and caption, verbatim
-  lines: ["3 ways to build", "a better care space"],
-  lead: "Planning a care space? Three practical things to consider.",
-  items: [
-    { title: "Patient comfort", text: "Who will use the space, and for how long.",
-      image: { src: "/media/guide-comfort.webp", w: 537, h: 537, alt: "A nurse sits beside an older patient in a teal armchair" } },
-    { title: "Everyday workflow", text: "How your team moves, works and reaches what it needs.",
-      image: { src: "/media/guide-workflow.webp", w: 1000, h: 666, alt: "A same-day care unit with rows of green seating and clear walkways" } },
-    { title: "Cleaning and upkeep", text: "What day-to-day care of the equipment will involve.",
-      image: { src: "/media/guide-upkeep.webp", w: 1000, h: 666, alt: "Wipe-clean seating and a side table in a diagnostic centre" } },
-  ],
-  close: "Calven Medical Supplies can help you explore suitable options.",
 };
 
 export const enquire = {
@@ -113,16 +181,13 @@ export const enquire = {
 };
 
 export const footer = {
-  // sheet: social post 01 caption, last two sentences
+  // sheet: social post 01 caption, last sentence
   line: "Discover treatment seating and clinical essentials for patients and the teams who care for them.",
   groups: [
-    { title: "Range", links: range.items.map((r) => ({ label: r.title, href: "#range", item: r.id })) },
-    { title: "Calven", links: [
-      { label: "Everyday essentials", href: "#essentials" },
-      { label: "Patients and teams", href: "#feature" },
-      { label: "Planning a care space", href: "#guide" },
-      { label: "Discuss your requirements", href: "#enquire" },
-    ] },
+    { title: "Discover Calven", links: sections },
+    { title: "Treatment seating", links: divisions[0].links },
+    { title: "Clinical equipment", links: divisions[1].links },
   ],
+  touch: { title: "Get in touch", text: "Tell us about your space, your team and your priorities.", cta: { label: "Discuss your requirements", href: "#enquire" } },
   legal: `© ${new Date().getFullYear()} Calven Medical Supplies`,
 };
